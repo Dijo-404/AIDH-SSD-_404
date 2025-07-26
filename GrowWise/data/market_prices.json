@@ -1,0 +1,52 @@
+[
+  {
+    "category": "Vegetable",
+    "name": "Onion",
+    "price": "₹30-40/kg"
+  },
+  {
+    "category": "Vegetable",
+    "name": "Tomato",
+    "price": "₹25-35/kg"
+  },
+  {
+    "category": "Vegetable",
+    "name": "Potato",
+    "price": "₹20-25/kg"
+  },
+  {
+    "category": "Vegetable",
+    "name": "Carrot",
+    "price": "₹35-45/kg"
+  },
+  {
+    "category": "Vegetable",
+    "name": "Cabbage",
+    "price": "₹15-20/kg"
+  },
+  {
+    "category": "Fruit",
+    "name": "Apple",
+    "price": "₹120-150/kg"
+  },
+  {
+    "category": "Fruit",
+    "name": "Banana",
+    "price": "₹40-50/dozen"
+  },
+  {
+    "category": "Fruit",
+    "name": "Orange",
+    "price": "₹60-80/kg"
+  },
+  {
+    "category": "Fruit",
+    "name": "Mango",
+    "price": "₹80-120/kg"
+  },
+  {
+    "category": "Fruit",
+    "name": "Grapes",
+    "price": "₹100-140/kg"
+  }
+]

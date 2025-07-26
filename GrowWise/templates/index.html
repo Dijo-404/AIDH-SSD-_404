@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <section id="hero" class="text-center py-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-seedling text-success me-3 floating"></i>
+                    Welcome to GrowWise
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Your intelligent farming companion powered by AI. Get weather insights, 
+                    detect plant diseases, check market prices, and receive expert guidance.
+                </p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <button class="btn btn-success btn-lg glow-on-hover" onclick="scrollToSection('weather')">
+                        <i class="fas fa-cloud-sun me-2"></i>Get Weather
+                    </button>
+                    <button class="btn btn-outline-success btn-lg glow-on-hover" onclick="scrollToSection('disease-detection')">
+                        <i class="fas fa-microscope me-2"></i>Detect Disease
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="mb-5">
+        <div class="container">
+            <h2 class="mb-4">
+                <i class="fas fa-chart-line text-primary me-2"></i>Dashboard
+            </h2>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-microscope fa-2x mb-2"></i>
+                            <h3 class="mb-0">{{ stats.total_predictions or 0 }}</h3>
+                            <small>Disease Scans</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-cloud-sun fa-2x mb-2"></i>
+                            <h3 class="mb-0">{{ stats.weather_queries or 0 }}</h3>
+                            <small>Weather Queries</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <i class="fas fa-microphone fa-2x mb-2"></i>
+                            <h3 class="mb-0">{{ stats.voice_queries or 0 }}</h3>
+                            <small>Voice Queries</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-warning text-dark">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-bar fa-2x mb-2"></i>
+                            <h3 class="mb-0">{{ stats.common_diseases|length or 0 }}</h3>
+                            <small>Disease Types</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-microscope me-2"></i>Recent Disease Scans
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_predictions %}
+                                {% for prediction in recent_predictions %}
+                                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                                    <div>
+                                        <strong>{{ prediction.disease.replace('_', ' ').title() }}</strong>
+                                        <small class="text-muted d-block">{{ prediction.confidence }}% confidence</small>
+                                    </div>
+                                    <small class="text-muted">{{ prediction.timestamp[:10] }}</small>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No disease scans yet. Upload a plant image to get started!</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-cloud-sun me-2"></i>Recent Weather Queries
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_weather %}
+                                {% for weather in recent_weather %}
+                                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                                    <div>
+                                        <strong>{{ weather.city }}</strong>
+                                        <small class="text-muted d-block">{{ weather.temperature }}°C - {{ weather.description }}</small>
+                                    </div>
+                                    <small class="text-muted">{{ weather.timestamp[:10] }}</small>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No weather queries yet. Check weather in the Weather section!</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weather Section -->
+    <section id="weather" class="mb-5">
+        <div class="container">
+            <h2 class="mb-4">
+                <i class="fas fa-cloud-sun text-info me-2"></i>Weather Information
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Get Weather Data</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="weather-form">
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">City Name</label>
+                                    <input type="text" class="form-control" id="city" placeholder="Enter city name" required>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-info">
+                                        <i class="fas fa-search me-2"></i>Get Weather
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info" onclick="getLocationWeather()">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Use Location
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Weather Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="weather-results">
+                                <p class="text-muted">Enter a city name or use your location to get weather information.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disease Detection Section -->
+    <section id="disease-detection" class="mb-5">
+        <div class="container">
+            <h2 class="mb-4">
+                <i class="fas fa-microscope text-danger me-2"></i>Plant Disease Detection
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Upload Plant Image</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="disease-form" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Select Plant Image</label>
+                                    <input type="file" class="form-control" id="image" accept="image/*" required>
+                                    <div class="form-text">Upload a clear image of plant leaves for best results.</div>
+                                </div>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-upload me-2"></i>Analyze Image
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Analysis Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="disease-results">
+                                <p class="text-muted">Upload a plant image to get disease analysis and treatment recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Prices Section -->
+    <section id="market-prices" class="mb-5">
+        <div class="container">
+            <h2 class="mb-4">
+                <i class="fas fa-chart-bar text-warning me-2"></i>Market Prices
+            </h2>
+            
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Current Market Rates</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-warning me-2" onclick="loadMarketPrices('vegetable')">
+                            Vegetables
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning me-2" onclick="loadMarketPrices('fruit')">
+                            Fruits
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="loadMarketPrices('all')">
+                            All Items
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="market-prices-results">
+                        <div class="text-center">
+                            <div class="spinner-border text-warning" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading market prices...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voice Assistant Section -->
+    <section id="voice-assistant" class="mb-5">
+        <div class="container">
+            <h2 class="mb-4">
+                <i class="fas fa-microphone text-success me-2"></i>Voice Assistant
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Ask Your Farming Questions</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="voice-form">
+                                <div class="mb-3">
+                                    <label for="voice-query" class="form-label">Your Question</label>
+                                    <textarea class="form-control" id="voice-query" rows="3" placeholder="Ask about weather, crops, diseases, prices, or farming tips..." required></textarea>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-paper-plane me-2"></i>Ask Question
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success" onclick="startVoiceRecognition()">
+                                        <i class="fas fa-microphone me-2"></i>Voice Input
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div id="voice-results" class="mt-4" style="display: none;">
+                                <h6>Response:</h6>
+                                <div class="alert alert-success" id="voice-response"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Sample Questions</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none" onclick="setVoiceQuery('What is the weather like today?')">
+                                        <i class="fas fa-cloud-sun me-2"></i>What is the weather like today?
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none" onclick="setVoiceQuery('Show me tomato prices')">
+                                        <i class="fas fa-chart-bar me-2"></i>Show me tomato prices
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none" onclick="setVoiceQuery('My plant leaves are turning yellow')">
+                                        <i class="fas fa-leaf me-2"></i>My plant leaves are turning yellow
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none" onclick="setVoiceQuery('What fertilizer should I use for corn?')">
+                                        <i class="fas fa-seedling me-2"></i>What fertilizer should I use for corn?
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mb-0">Processing your request...</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize market prices on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadMarketPrices('all');
+});
+</script>
+{% endblock %}
