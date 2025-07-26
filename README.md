@@ -1,6 +1,13 @@
 # AIDH-SSD-_404
 This is a repo for our project for All India Developer Challenge 2025 
 # This is team "404 not founders"
+## Team members
+```
+1-Sakthivel P
+2-S Someshwaran
+3-Dijo S Benelen
+
+```
 
 # GrowWise API
 
