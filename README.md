@@ -9,19 +9,6 @@ This is a repo for our project for All India Developer Challenge 2025
 
 ```
 
-# GrowWise API
-
-A comprehensive Smart Farming Assistant API built with FastAPI, featuring plant disease detection, weather information, market prices, and voice assistance.
-
-## 🌟 Features
-
-- **🔬 Plant Disease Detection**: AI-powered CNN model for identifying plant diseases from images
-- **🌤️ Weather Information**: Real-time weather data integration with OpenWeatherMap
-- **💰 Market Prices**: Live market price scraping for vegetables and fruits
-- **🎤 Voice Assistant**: Natural language query processing for farming assistance
-- **📊 Analytics**: Usage statistics and historical data tracking
-- **🗄️ Database**: SQLite database for data persistence
-
 # GrowWise - Smart Farming Assistant
 
 A comprehensive Flask-based smart farming application that provides AI-powered tools for crop management, featuring plant disease detection, real-time weather information, market price tracking, and voice assistance.
