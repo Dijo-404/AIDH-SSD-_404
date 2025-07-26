@@ -15,173 +15,149 @@ A comprehensive Smart Farming Assistant API built with FastAPI, featuring plant 
 - **📊 Analytics**: Usage statistics and historical data tracking
 - **🗄️ Database**: SQLite database for data persistence
 
-## 🏗️ Architecture
+# GrowWise - Smart Farming Assistant
 
-The application follows a clean, modular architecture:
+A comprehensive Flask-based smart farming application that provides AI-powered tools for crop management, featuring plant disease detection, real-time weather information, market price tracking, and voice assistance.
 
-```
-src/
-├── api/           # API routes and endpoints
-├── database/      # Database operations and models
-├── models/        # Pydantic schemas and CNN model
-├── services/      # Business logic services
-├── config.py      # Configuration settings
-└── main.py        # Application entry point
-```
+![GrowWise Demo](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
+![Python](https://img.shields.io/badge/Python-3.11+-blue)
+![Flask](https://img.shields.io/badge/Flask-Latest-red)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 
-## 🚀 Quick Start
+## 🌟 Features
 
-### Prerequisites
+- **🔬 Plant Disease Detection**: AI-powered image analysis for identifying plant diseases and providing treatment recommendations
+- **🌤️ Real-time Weather Data**: Integration with OpenWeatherMap API for accurate weather information
+- **📊 Market Price Tracking**: Live market prices for fruits and vegetables
+- **🎤 Voice Assistant**: Natural language processing for farming queries and advice
+- **📱 Responsive Design**: Modern glassmorphism UI with smooth animations
+- **🗄️ PostgreSQL Database**: Scalable data persistence with SQLAlchemy ORM
+- **☁️ Vercel Ready**: Optimized for serverless deployment
 
-- Python 3.8+
-- Chrome/Chromium browser (for web scraping)
+## 🚀 Live Demo
+
+The application is deployed and ready for use on Vercel.
+
+## 🛠️ Technology Stack
+
+- **Backend**: Flask, SQLAlchemy, PostgreSQL
+- **Frontend**: Bootstrap 5, Vanilla JavaScript, Glassmorphism CSS
+- **APIs**: OpenWeatherMap API
+- **Deployment**: Vercel Serverless
+- **Image Processing**: Pillow (PIL)
+- **Database**: PostgreSQL with automatic table creation
+
+## 📋 Prerequisites
+
+- Python 3.11+
+- PostgreSQL database
 - OpenWeatherMap API key
 
-### Installation
+## 🔧 Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd growwise-api
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set environment variables**
-   ```bash
-   export OPENWEATHER_API_KEY="your_api_key_here"
-   export MODEL_PATH="path/to/your/model.pt"
-   ```
-
-4. **Run the application**
-   ```bash
-   python -m src.main
-   ```
-
-The API will be available at `http://localhost:8000`
-
-## 📚 API Documentation
-
-### Interactive Documentation
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
-
-### Main Endpoints
-
-#### Health Check
-```http
-GET /health
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/growwise.git
+cd growwise
 ```
 
-#### Weather Information
-```http
-POST /weather
-Content-Type: application/json
-
-{
-  "city": "Chennai",
-  "lat": 13.0827,
-  "lon": 80.2707
-}
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
-#### Market Prices
-```http
-GET /prices
+3. Set up environment variables:
+```bash
+export DATABASE_URL="your_postgresql_connection_string"
+export SESSION_SECRET="your_secret_key"
+export OPENWEATHER_API_KEY="your_openweather_api_key"
 ```
 
-#### Disease Detection
-```http
-POST /predict
-Content-Type: multipart/form-data
-
-file: <image_file>
+4. Run the application:
+```bash
+python main.py
 ```
 
-#### Voice Query
-```http
-POST /voice-query
-Content-Type: application/json
+## 🌐 Deployment
 
-{
-  "query": "What's the weather like today?"
-}
+### Vercel Deployment
+
+The application is configured for Vercel deployment:
+
+1. Install Vercel CLI:
+```bash
+npm i -g vercel
 ```
 
-## 🧠 AI Model
-
-The disease detection uses a custom CNN architecture trained on plant disease datasets:
-
-- **Input**: 224x224 RGB images
-- **Architecture**: 4-layer CNN with batch normalization and dropout
-- **Classes**: 39 different plant diseases and healthy states
-- **Accuracy**: Optimized for agricultural use cases
-
-## 🗄️ Database Schema
-
-The application uses SQLite with the following tables:
-
-- `predictions`: Disease detection history
-- `weather_cache`: Weather query cache
-- `market_prices`: Market price data
-- `user_queries`: Voice query logs
-
-## 🔧 Configuration
-
-Key configuration options in `src/config.py`:
-
-```python
-class Settings:
-    OPENWEATHER_API_KEY = "your_api_key"
-    MODEL_PATH = "plant_disease_model.pt"
-    DATABASE_PATH = "growwise_app.db"
-    # ... other settings
+2. Deploy:
+```bash
+vercel
 ```
 
-## 🛡️ Security Features
+3. Set environment variables in Vercel dashboard:
+   - `DATABASE_URL`
+   - `SESSION_SECRET`
+   - `OPENWEATHER_API_KEY`
 
-- CORS middleware for cross-origin requests
-- Trusted host middleware
-- Input validation with Pydantic
-- Error handling and logging
-- SQL injection prevention
+## 📊 Database Schema
 
-## 📊 Monitoring & Analytics
+The application uses PostgreSQL with the following tables:
 
-The API provides built-in analytics:
+- **predictions**: Plant disease detection results
+- **weather_queries**: Weather data cache
+- **voice_queries**: Voice assistant conversation history
+- **market_prices**: Market price data
 
-- Usage statistics
-- Prediction history
-- Weather query logs
-- Common disease patterns
+## 🎨 UI Features
 
-## 🚀 Deployment
+- **Glassmorphism Design**: Modern glass effect with backdrop blur
+- **Smooth Animations**: CSS transitions and hover effects
+- **Responsive Layout**: Mobile-first design approach
+- **Dark Theme**: Optimized for low-light environments
+- **Enhanced Readability**: Improved font colors and contrast
 
-### Docker Deployment
-```dockerfile
-FROM python:3.9-slim
+## 🔊 Voice Assistant
 
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+The voice assistant supports queries about:
+- Crop management and farming techniques
+- Pest control and disease prevention
+- Weather conditions and forecasts
+- Market prices and selling strategies
 
-COPY src/ ./src/
-EXPOSE 8000
+## 📈 Features Overview
 
-CMD ["python", "-m", "src.main"]
-```
+### Disease Detection
+- Upload plant images for analysis
+- AI-powered disease identification
+- Treatment recommendations
+- Confidence scoring
 
-### Production Considerations
+### Weather Integration
+- Current weather conditions
+- Location-based forecasts
+- Humidity and wind speed data
+- Weather history tracking
 
-1. **Environment Variables**: Set proper API keys and paths
-2. **Database**: Consider PostgreSQL for production
-3. **Caching**: Implement Redis for better performance
-4. **Load Balancing**: Use nginx or similar
-5. **Monitoring**: Add application monitoring tools
+### Market Prices
+- Real-time price updates
+- Category-based filtering
+- Historical price trends
+- Market insights
 
+## 🔒 Security
+
+- Environment variable management
+- Secure file upload handling
+- SQL injection prevention via SQLAlchemy ORM
+- Input validation and sanitization
+
+## 📚 API Endpoints
+
+- `GET /` - Main dashboard
+- `POST /api/weather` - Weather data
+- `POST /api/disease-detection` - Disease analysis
+- `GET /api/market-prices` - Market prices
+- `POST /api/voice-query` - Voice assistant
 
 ## 🔄 Version History
 
