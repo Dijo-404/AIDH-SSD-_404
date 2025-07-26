@@ -161,3 +161,4 @@ The voice assistant supports queries about:
 ## Note
 
 - This is not the final product there are still some bugs and issue which will be resolved soon 
+- Some features are also missing will be added soon
