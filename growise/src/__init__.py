@@ -1,1 +1,0 @@
-# GrowWise API Package
