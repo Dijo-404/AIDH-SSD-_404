@@ -13,7 +13,7 @@ This is a repo for our project for All India Developer Challenge 2025
 
 A comprehensive Flask-based smart farming application that provides AI-powered tools for crop management, featuring plant disease detection, real-time weather information, market price tracking, and voice assistance.
 
-![GrowWise Demo](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
+![GrowWise Demo](https://img.shields.io/badge/Status-Devlopment-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.11+-blue)
 ![Flask](https://img.shields.io/badge/Flask-Latest-red)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
